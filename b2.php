@@ -18,7 +18,7 @@ class B2Uploader{
 	private $uploadUrl;
 
 
-	public function getUploadURL(){
+	private function getUploadURL(){
 		$url = $this->getApiUrl() .  "/b2api/v1/b2_get_upload_url";
 
 		// Set the headers
@@ -35,7 +35,7 @@ class B2Uploader{
 		$this->authorizationToken = $response->authorizationToken;
 	}
 
-	public function authorize(){
+	private function authorize(){
 		// Set the headers
 		$headers = array();
 		$headers[] = "Accept: application/json";
@@ -51,6 +51,12 @@ class B2Uploader{
 	}
 
 	public function uploadFile($path){
+		// Authorize ourselves
+		$this->authorize();
+
+		// Get the uploadUrl
+		$this->getUploadURL();
+
 		// Open the file for reading
 		$handle = fopen($path, 'r');
 		$read_file = fread($handle,filesize($path));
