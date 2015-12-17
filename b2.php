@@ -17,10 +17,25 @@ class B2Uploader{
 	private $downloadUrl;
 	private $uploadUrl;
 
+	public function __construct(array $config)
+	{
+		// Check that we have the required parameters
+		$requireParameters = ['accountId', 'applicationKey', 'bucketId'];
+
+		foreach($requireParameters as $parameter){
+			if(!isset($config[$parameter])){
+				throw new InvalidArgumentException('Parameter ' . $parameter . ' was not passed.');
+			}
+		}
+
+		// Set the configuration
+		$this->setAccountId($config['accountId']);
+		$this->setApplicationKey($config['applicationKey']);
+		$this->setBucketId($config['bucketId']);
+	}
 
 	public function getFilesInBucket(){
 		$this->authorize();
-		$this->getApiUrl();
 
 		$url = $this->getApiUrl() .  "/b2api/v1/b2_list_file_names";
 
@@ -65,7 +80,7 @@ class B2Uploader{
 	}
 
 	public function uploadFile($path){
-		// Authorize ourselves
+		// Authorize
 		$this->authorize();
 
 		// Get the uploadUrl
@@ -92,7 +107,6 @@ class B2Uploader{
 	}
 
 	private function curlRequest($httpMethod = 'GET', $url, array $headers = [], $postFields = [], $uploadFile = false){
-
 		$session = curl_init($url);
 
 		// Add the file contents if we're uploading
