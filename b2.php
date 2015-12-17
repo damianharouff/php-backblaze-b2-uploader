@@ -18,6 +18,20 @@ class B2Uploader{
 	private $uploadUrl;
 
 
+	public function getFilesInBucket(){
+		$this->authorize();
+		$this->getApiUrl();
+
+		$url = $this->getApiUrl() .  "/b2api/v1/b2_list_file_names";
+
+		$headers = array();
+		$headers[] = "Authorization: " . $this->getAuthorizationToken();
+
+		$postFields = array("bucketId" => $this->getBucketId());
+
+		return $this->curlRequest('POST', $url, $headers, $postFields);
+	}
+
 	private function getUploadURL(){
 		$url = $this->getApiUrl() .  "/b2api/v1/b2_get_upload_url";
 
@@ -160,6 +174,5 @@ class B2Uploader{
 	private function setDownloadUrl($url){
 		$this->downloadUrl = $url;
 	}
-
 
 }
