@@ -79,7 +79,7 @@ class B2Uploader{
 		$this->setDownloadUrl($response->downloadUrl);
 	}
 
-	public function uploadFile($path){
+	public function uploadFile($path, $folder = ''){
 		// Authorize
 		$this->authorize();
 
@@ -93,10 +93,15 @@ class B2Uploader{
 		// Generate SHA1 hash
 		$sha1_of_file_data = sha1_file($path);
 
+		// Check that folder ends with trailing slash
+		if($folder != '' && substr($folder, -1) != '/'){
+			$folder .= '/';
+		}
+
 		// Add headers
 		$headers = array();
 		$headers[] = "Authorization: " . $this->getAuthorizationToken();
-		$headers[] = "X-Bz-File-Name: " . basename($path);
+		$headers[] = "X-Bz-File-Name: " . $folder . basename($path);
 		$headers[] = "Content-Type: " . 'b2/x-auto';
 		$headers[] = "X-Bz-Content-Sha1: " . $sha1_of_file_data;
 
