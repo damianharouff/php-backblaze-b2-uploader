@@ -63,6 +63,23 @@ class B2Uploader{
 		$this->uploadUrl = $response->uploadUrl;
 		$this->authorizationToken = $response->authorizationToken;
 	}
+	
+	public function getFileInfo($fileId) {
+		// Authorize
+		$this->authorize();
+
+		$url = $this->getApiUrl() .  "/b2api/v1/b2_get_file_info";
+
+		// Add headers
+		$headers = array();
+		$headers[] = "Authorization: " . $this->getAuthorizationToken();
+
+		$postFields = array("fileId" => $fileId);
+		// Make the request
+		$response = $this->curlRequest('POST', $url, $headers, $postFields);
+
+		return $response;
+	}
 
 	private function authorize(){
 		// Set the headers
