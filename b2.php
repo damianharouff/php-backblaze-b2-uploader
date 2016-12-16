@@ -81,7 +81,7 @@ class B2Uploader{
 		return $response;
 	}
 	
-	public function getFileVersions($startFileName='',$startFileId='',$maxFileCount=0,$prefix="",$delimiter) {
+	public function getFileVersions($startFileName='',$startFileId='',$maxFileCount=0,$prefix="",$delimiter="") {
 		// Authorize
 		$this->authorize();
 
@@ -91,8 +91,8 @@ class B2Uploader{
 		if (!empty($startFileName)) $postFields["startFileName"] = $startFileName;
 		if (!empty($startFileId)) $postFields["startFileId"] = $startFileId;
 		if (!empty($maxFileCount)) $postFields["maxFileCount"] = $maxFileCount;
-		if (!empty($prefix)) $postFields["prefix:"] = $delimiter;
-
+		if (!empty($prefix)) $postFields["prefix:"] = $prefix;
+		if (!empty($delimiter)) $postFields["delimiter:"] = $delimiter;
 		// Add headers
 		$headers = array();
 		$headers[] = "Authorization: " . $this->getAuthorizationToken();
