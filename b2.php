@@ -63,6 +63,44 @@ class B2Uploader{
 		$this->uploadUrl = $response->uploadUrl;
 		$this->authorizationToken = $response->authorizationToken;
 	}
+	
+	public function getFileInfo($fileId) {
+		// Authorize
+		$this->authorize();
+
+		$url = $this->getApiUrl() .  "/b2api/v1/b2_get_file_info";
+
+		// Add headers
+		$headers = array();
+		$headers[] = "Authorization: " . $this->getAuthorizationToken();
+
+		$postFields = array("fileId" => $fileId);
+		// Make the request
+		$response = $this->curlRequest('POST', $url, $headers, $postFields);
+
+		return $response;
+	}
+	
+	public function getFileVersions($startFileName='',$startFileId='',$maxFileCount=0,$prefix="",$delimiter="") {
+		// Authorize
+		$this->authorize();
+
+		$url = $this->getApiUrl() .  "/b2api/v1/b2_list_file_versions";
+
+		$postFields = array("bucketId" => $this->getBucketId());
+		if (!empty($startFileName)) $postFields["startFileName"] = $startFileName;
+		if (!empty($startFileId)) $postFields["startFileId"] = $startFileId;
+		if (!empty($maxFileCount)) $postFields["maxFileCount"] = $maxFileCount;
+		if (!empty($prefix)) $postFields["prefix:"] = $prefix;
+		if (!empty($delimiter)) $postFields["delimiter:"] = $delimiter;
+		// Add headers
+		$headers = array();
+		$headers[] = "Authorization: " . $this->getAuthorizationToken();
+
+		// Make the request
+		$response = $this->curlRequest('POST', $url, $headers,$postFields);
+		return $response;
+	}
 
 	private function authorize(){
 		// Set the headers
