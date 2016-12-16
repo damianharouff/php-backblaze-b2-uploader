@@ -12,7 +12,7 @@ class B2Uploader{
 	private $authorizationToken;	// Filled in by Authorize() function
 
 	// URLs
-	const AUTHORIZE_URL = 'https://api.backblaze.com/b2api/v1/b2_authorize_account';
+	const AUTHORIZE_URL = 'https://api.backblazeb2.com/b2api/v1/b2_authorize_account';
 	private $apiUrl;
 	private $downloadUrl;
 	private $uploadUrl;
